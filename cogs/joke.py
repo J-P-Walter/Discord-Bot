@@ -21,7 +21,7 @@ class Joke(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(brief="Tells a joke")
     async def joke(self, ctx):
         setup, punchline = await get_joke()
         await ctx.send(setup)

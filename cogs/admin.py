@@ -12,7 +12,7 @@ class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(brief="Unloads cog")
     @commands.is_owner()
     async def unload(self, ctx, cog: str):
         try:
@@ -22,7 +22,7 @@ class Admin(commands.Cog):
             return
         await ctx.send("Cog unloaded")
 
-    @commands.command()
+    @commands.command(brief="Loads cog")
     @commands.is_owner()
     async def load(self, ctx, cog: str):
         try:
@@ -32,7 +32,7 @@ class Admin(commands.Cog):
             return
         await ctx.send("Cog loaded")
 
-    @commands.command()
+    @commands.command(brief="Reloads cog")
     @commands.is_owner()
     async def reload(self, ctx, cog: str):
         try:
@@ -43,7 +43,7 @@ class Admin(commands.Cog):
             return
         await ctx.send("Cog reloaded")
 
-    @commands.command()
+    @commands.command(brief="Gives status of aspects of server")
     @commands.is_owner()
     async def status(self, ctx):
         guild = ctx.guild

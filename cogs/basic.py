@@ -11,7 +11,7 @@ class Basic(commands.Cog):
         await ctx.send("Please check with !help for the usage of this " 
             "command or talk to your admin")
 
-    @commands.command()
+    @commands.command(brief="P O N G")
     async def ping(self, ctx):
         await ctx.send("Pong")
 

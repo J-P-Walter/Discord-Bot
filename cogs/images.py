@@ -16,7 +16,7 @@ class Images(commands.Cog):
         self.reddit = praw.Reddit(client_id=reddit_id, client_secret=reddit_secret, user_agent="MyDiscordBot:%s:1.0" %reddit_id)
         
 
-    @commands.command(breif="Random picture of a cat")
+    @commands.command(brief="Random picture of a cat")
     async def cat(self, ctx):
         async with ctx.channel.typing():
             async with aiohttp.ClientSession() as cs:
