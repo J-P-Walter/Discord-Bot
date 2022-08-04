@@ -19,7 +19,32 @@ class Moderator(commands.Cog):
         if member is not None:
             await ctx.guild.kick(member, reason)
         else:      
-            await ctx.send("Error: please refer to !help")
+            await ctx.send("Error: mention user by @")
 
+    @commands.command(brief="Bans member")
+    @mods_or_owner()
+    @commands.guild_only()
+    @commands.has_permissions(ban_members=True)
+    async def ban(self, ctx, member: discord.Member=None, reason: str = "Gottem"):
+        if member is not None:
+            await ctx.guild.ban(member, reason)
+        else:      
+            await ctx.send("Error: mention user by @")
+
+    @commands.command(brief="Bans member")
+    @mods_or_owner()
+    @commands.guild_only()
+    @commands.has_permissions(ban_members=True)
+    async def unban(self, ctx, member: str="", reason: str = "whoops"):
+        if member == "":
+            await ctx.send("Error: mention user by text")
+            return
+        bans = await ctx.guild.bans()
+        for b in bans:
+            if b.user.name == member:     
+                await ctx.guild.unban(b.user.name, reason)
+                await ctx.send("User unbanned")
+                return
+        await ctx.send("User not found in ban list")
 def setup(bot):
     bot.add_cog(Moderator(bot))
