@@ -4,7 +4,7 @@ import discord
 import configparser
 import praw
 import random
-from settings._global import REDDIT_ENABLED_SUBREDDITS
+from settings._global import REDDIT_ENABLED_SUBREDDITS, REDDIT_ENABLED_NSFW_SUBREDDITS
 
 class Images(commands.Cog):
     def __init__(self, bot):
@@ -46,13 +46,23 @@ class Images(commands.Cog):
     async def random(self, ctx, subreddit: str = ""):
         async with ctx.channel.typing():
             if self.reddit:
+                nsfw_flag = False
                 chosen_subreddit = REDDIT_ENABLED_SUBREDDITS[0]
                 if subreddit:
                     if subreddit in REDDIT_ENABLED_SUBREDDITS:
                        chosen_subreddit = subreddit
+                    elif subreddit in REDDIT_ENABLED_NSFW_SUBREDDITS:
+                        chosen_subreddit = subreddit
+                        nsfw_flag = True
                     else:
-                        await ctx.send("Please choose subreddit of the following list: %s" %", ".join(REDDIT_ENABLED_SUBREDDITS))
+                        await ctx.send("Please choose subreddit of the following list: %s " 
+                        "NSFW: %s" %(", ".join(REDDIT_ENABLED_SUBREDDITS),", (".join(REDDIT_ENABLED_NSFW_SUBREDDITS)))
                         return
+                    
+                if nsfw_flag:
+                    if not ctx.channel.is_nsfw():
+                        await ctx.send("NSFW not allowed in this channel")
+                        return 
                 submissions = self.reddit.subreddit(chosen_subreddit).hot()
                 post_to_pick = random.randint(1,10)
                 for i in range(0, post_to_pick):
