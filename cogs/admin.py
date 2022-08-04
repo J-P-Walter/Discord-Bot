@@ -13,9 +13,35 @@ class Admin(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    @mods_or_owner()
-    async def foo(self, ctx):
-        await ctx.send("A")
+    @commands.is_owner()
+    async def unload(self, ctx, cog: str):
+        try:
+            self.bot.unload_extension(cog)
+        except Exception as e:
+            await ctx.send("Error: could not unload")
+            return
+        await ctx.send("Cog unloaded")
+
+    @commands.command()
+    @commands.is_owner()
+    async def load(self, ctx, cog: str):
+        try:
+            self.bot.load_extension(cog)
+        except Exception as e:
+            await ctx.send("Error: could not load")
+            return
+        await ctx.send("Cog loaded")
+
+    @commands.command()
+    @commands.is_owner()
+    async def reload(self, ctx, cog: str):
+        try:
+            self.bot.unload_extension(cog)
+            self.bot.load_extension(cog)
+        except Exception as e:
+            await ctx.send("Error: could not reload")
+            return
+        await ctx.send("Cog reloaded")
 
     @commands.command()
     @commands.is_owner()
