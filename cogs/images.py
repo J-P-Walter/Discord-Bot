@@ -1,10 +1,20 @@
 from discord.ext import commands
 import aiohttp
 import discord
+import configparser
+import praw
+import random
+from settings._global import REDDIT_ENABLED_SUBREDDITS
 
 class Images(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        config = configparser.ConfigParser()
+        config.read('tokens.cfg')
+        reddit_id = config.get('REDDIT', 'reddit_id')
+        reddit_secret = config.get('REDDIT', 'reddit_secret')
+        self.reddit = praw.Reddit(client_id=reddit_id, client_secret=reddit_secret, user_agent="MyDiscordBot:%s:1.0" %reddit_id)
+        
 
     @commands.command(breif="Random picture of a cat")
     async def cat(self, ctx):
@@ -32,8 +42,25 @@ class Images(commands.Cog):
 
                     await ctx.send(embed=embed)
 
-
-
+    @commands.command(brief="Random image from Reddit")
+    async def random(self, ctx, subreddit: str = ""):
+        async with ctx.channel.typing():
+            if self.reddit:
+                chosen_subreddit = REDDIT_ENABLED_SUBREDDITS[0]
+                if subreddit:
+                    if subreddit in REDDIT_ENABLED_SUBREDDITS:
+                       chosen_subreddit = subreddit
+                    else:
+                        await ctx.send("Please choose subreddit of the following list: %s" %", ".join(REDDIT_ENABLED_SUBREDDITS))
+                        return
+                submissions = self.reddit.subreddit(chosen_subreddit).hot()
+                post_to_pick = random.randint(1,10)
+                for i in range(0, post_to_pick):
+                    submission = next(x for x in submissions if not x.stickied)
+                await ctx.send(submission.url)
+                
+            else:
+                await ctx.sent("Not working")
 
 
 

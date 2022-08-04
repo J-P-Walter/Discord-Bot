@@ -9,6 +9,6 @@ for filename in os.listdir('./cogs'):
         bot.load_extension(f'cogs.{filename[:-3]}')
 
 config = configparser.ConfigParser()
-config.read('token.cfg')
+config.read('tokens.cfg')
 token = config.get('TOKEN', 'token')
 bot.run(token)
