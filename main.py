@@ -1,4 +1,3 @@
-from fileinput import filename
 from discord.ext import commands
 import configparser
 import os
