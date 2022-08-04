@@ -1,5 +1,7 @@
 from discord.ext import commands
 from TextToOwO.owo import text_to_owo
+import discord
+from util import notify_user
 
 class Basic(commands.Cog):
     def __init__(self, bot):
@@ -24,6 +26,14 @@ class Basic(commands.Cog):
     async def invite(self, ctx):
         link = await ctx.channel.create_invite(max=1)
         await ctx.send(link)
+
+    @commands.command()
+    async def poke(self, ctx, member : discord.Member = None):
+        if member is not None:
+            message = "%s poked you!" % ctx.author.name
+            await notify_user(member, message)
+        else:
+            await ctx.send("User @ to poke someone")
 
 def setup(bot):
     bot.add_cog(Basic(bot))
