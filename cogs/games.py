@@ -58,25 +58,33 @@ class Games(commands.Cog):
 
     @commands.group()
     async def gaw(self, ctx):
-        pass
+        ctx.gaw_game = GuessAWordGame()
 
     @gaw.command(name="start")
     async def start(self, ctx, *members: discord.Member):
         players = list()
         for m in members:
             players.append(m)
-        game = GuessAWordGame()
-        result = await game.start_game(ctx.guild, ctx.author, players)
-        if result is None:
+        channel = await ctx.gaw_game.start_game(ctx.guild, ctx.author, players)
+        if channel is None:
             await ctx.send("You already have a game, please close it first")
         else:
+            game = ctx.gaw_game.fetch_game()
             await ctx.send("Have fun!")
+            await channel.send("The category is %s with a word length of %s" %(game.category, len(game.word)))
 
 
-            
-    @gaw.command(name="g")
-    async def guess(self, ctx):
-        pass
+
+    @gaw.command(name="guess")
+    async def guess(self, ctx, guess: str):
+        channel_id = ctx.channel.id
+        result, hint = ctx.gaw_game.guess(channel_id, guess)
+        if result is None:
+            await ctx.send("Not allowed in this channel")
+        elif result is True:
+            await ctx.send("You won!")
+        elif result is False and hint != "":
+            await ctx.send("Guess was close")
 
 def setup(bot):
     bot.add_cog(Games(bot))
