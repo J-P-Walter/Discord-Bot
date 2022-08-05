@@ -27,9 +27,16 @@ class GuessAWordGame:
 
             self.save(new_game)
             self.get_game(channel.id)
-            
+
             return channel
         return None
+
+    def new_round(self, channel):
+        self.current_game = None
+        new_game = self.create_game_instance(channel.id, channel.name)
+        self.save(new_game)
+        self.get_game(channel.id)
+        return new_game
 
     def guess(self, channel_id, guess):
         self.get_game(channel_id)
@@ -47,13 +54,14 @@ class GuessAWordGame:
     def save(self, game):
         games[game.channel_id] = game
 
-    def delete(self, channel_id, guild):
+    async def destroy(self, channel_id, guild):
         games.pop(channel_id)
-        self.delete_channel(channel_id, guild)
+        await self.delete_channel(channel_id, guild)
 
-    def delete_channel(self, channel_id, guild):
+    async def delete_channel(self, channel_id, guild):
+
         channel = guild.get_channel(channel_id)
-        channel.delete()
+        await channel.delete()
 
     async def set_permissions(self, guild, channel, players):
         await channel.set_permissions(guild.default_role, view_channel=False, send_messages=False)

@@ -83,8 +83,20 @@ class Games(commands.Cog):
             await ctx.send("Not allowed in this channel")
         elif result is True:
             await ctx.send("You won!")
+            ctx.gaw_game.new_round(ctx.channel)
+            game = ctx.gaw_game.fetch_game()
+            await ctx.send("New round!")
+            await ctx.channel.send("The category is %s with a word length of %s" %(game.category, len(game.word)))
+
+
         elif result is False and hint != "":
             await ctx.send("Guess was close")
+
+    @gaw.command(name="stop")
+    async def endgame(self, ctx):
+        await ctx.gaw_game.destroy(ctx.channel.id, ctx.guild)
+
+
 
 def setup(bot):
     bot.add_cog(Games(bot))
