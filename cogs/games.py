@@ -1,4 +1,5 @@
 from discord.ext import commands
+import discord
 
 from rps.parser import RockPaperScissorParser
 from rps.model import RPS
@@ -60,10 +61,19 @@ class Games(commands.Cog):
         pass
 
     @gaw.command(name="start")
-    async def start(self, ctx):
+    async def start(self, ctx, *members: discord.Member):
+        players = list()
+        for m in members:
+            players.append(m)
         game = GuessAWordGame()
-        await game.start_game(ctx.guild, ctx.author, list())
+        result = await game.start_game(ctx.guild, ctx.author, players)
+        if result is None:
+            await ctx.send("You already have a game, please close it first")
+        else:
+            await ctx.send("Have fun!")
 
+
+            
     @gaw.command(name="g")
     async def guess(self, ctx):
         pass
