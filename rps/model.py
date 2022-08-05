@@ -6,7 +6,7 @@ class RPS:
     def get_choices(self):
         return (self.ROCK, self.PAPER, self.SCISSOR)
 
-    def check_win(self, user1_choice, user2_choice)
+    def check_win(self, user1_choice, user2_choice):
         winner_check = {
                 (RPS.ROCK, RPS.PAPER): False,
                 (RPS.ROCK, RPS.SCISSOR): True,
@@ -23,3 +23,5 @@ class RPS:
             won = None
         else:
             won = winner_check[(user1_choice, user2_choice)]
+        
+        return won

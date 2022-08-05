@@ -1,7 +1,10 @@
 from discord.ext import commands
 from rps.parser import RockPaperScissorParser
 from rps.model import RPS
-import random 
+from rps.controller import RPSGame
+
+word = 'discord'
+user_guesses = list()
 
 class Games(commands.Cog):
     def __init__(self, bot):
@@ -13,10 +16,10 @@ class Games(commands.Cog):
         """
         Play a game of Rock, Paper, Scissors
         """
-        rps_m = RPS()
+        game_instance = RPSGame()
         user_choice = user_choice.choice
 
-        
+        won, bot_choice = game_instance.run(user_choice)
         if won is None:
             message = "It's a tie!"
         elif won is True:
@@ -25,6 +28,9 @@ class Games(commands.Cog):
             message = "You lost! %s vs %s" %(user_choice, bot_choice)
 
         await ctx.send(message)
+
+
+
 
 def setup(bot):
     bot.add_cog(Games(bot))
