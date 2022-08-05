@@ -2,7 +2,9 @@ from discord.ext import commands
 from rps.parser import RockPaperScissorParser
 from rps.model import RPS
 from rps.controller import RPSGame
+from hangman.controller import HangmanGame
 
+hangman_games = {}
 word = 'discord'
 user_guesses = list()
 
@@ -30,25 +32,24 @@ class Games(commands.Cog):
         await ctx.send(message)
 
     @commands.command(brief="Play a game of hangman")
-    async def hm(self, ctx, guess):
-        progress_word = ""
-        guess = guess.lower()
-        if len(user_guesses) >= len(word):
-            await ctx.send("Game over. Ran out of guesses")
-            return
-        for c in word.lower():
-            if guess == c  or c in user_guesses:
-                progress_word += c
-            else:
-                progress_word += "\_."
-        user_guesses.append(guess)
+    @commands.dm_only()
+    async def hm(self, ctx, guess: str):
+        player_id = ctx.author.id
+        hangman_instance = HangmanGame()
+        game_over, won = hangman_instance.run(player_id, guess)
 
-        if guess == word:
-            await ctx.send("Correct, you won!")
+        if game_over:
+            game_over_message = "You did not win"
+            if won:
+                game_over_message = "You won"
+
+            hangman_instance.reset(player_id)
+            await ctx.send(game_over_message)
+            await ctx.send("The word was %s" %hangman_instance.get_secret_word())
+            
         else:
-            await ctx.send("Progress: %s" %progress_word)
-            await ctx.send("Guesses so far %s" %", ".join(user_guesses))
-
+            await ctx.send("Progress: %s" %hangman_instance.get_progress_string())
+            await ctx.send("Guesses so far %s" %hangman_instance.get_guess_string())  
 
 def setup(bot):
     bot.add_cog(Games(bot))
