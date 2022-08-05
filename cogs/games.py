@@ -29,7 +29,25 @@ class Games(commands.Cog):
 
         await ctx.send(message)
 
+    @commands.command(brief="Play a game of hangman")
+    async def hm(self, ctx, guess):
+        progress_word = ""
+        guess = guess.lower()
+        if len(user_guesses) >= len(word):
+            await ctx.send("Game over. Ran out of guesses")
+            return
+        for c in word.lower():
+            if guess == c  or c in user_guesses:
+                progress_word += c
+            else:
+                progress_word += "\_."
+        user_guesses.append(guess)
 
+        if guess == word:
+            await ctx.send("Correct, you won!")
+        else:
+            await ctx.send("Progress: %s" %progress_word)
+            await ctx.send("Guesses so far %s" %", ".join(user_guesses))
 
 
 def setup(bot):

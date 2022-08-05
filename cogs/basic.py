@@ -9,7 +9,7 @@ class Basic(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, ex):
-        #print(ex)
+        print(ex)
         await ctx.send("Please check with !help for the usage of this " 
             "command or talk to your admin")
 
