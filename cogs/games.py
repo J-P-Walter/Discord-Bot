@@ -1,8 +1,12 @@
 from discord.ext import commands
+
 from rps.parser import RockPaperScissorParser
 from rps.model import RPS
 from rps.controller import RPSGame
+
 from hangman.controller import HangmanGame
+
+from gaw.controller import GuessAWordGame
 
 hangman_games = {}
 word = 'discord'
@@ -50,6 +54,19 @@ class Games(commands.Cog):
         else:
             await ctx.send("Progress: %s" %hangman_instance.get_progress_string())
             await ctx.send("Guesses so far %s" %hangman_instance.get_guess_string())  
+
+    @commands.group()
+    async def gaw(self, ctx):
+        pass
+
+    @gaw.command(name="start")
+    async def start(self, ctx):
+        game = GuessAWordGame()
+        await game.start_game(ctx.guild, ctx.author, list())
+
+    @gaw.command(name="g")
+    async def guess(self, ctx):
+        pass
 
 def setup(bot):
     bot.add_cog(Games(bot))
