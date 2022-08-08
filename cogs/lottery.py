@@ -29,12 +29,11 @@ class Lottery(commands.Cog):
 
     @lottery.command(name="next")
     async def lottery_next(self, ctx):
-        pass
+        c = self.bot.get_command("lottery tickets costs")
+        await ctx.invoke(c)
 
     @lottery.group(name="tickets")
     async def lottery_tickets(self, ctx):
-        #c = self.bot.get_command("lottery tickets costs")
-        #await ctx.invoke(c)
         pass
 
     @lottery_tickets.command(name="list")
@@ -42,13 +41,12 @@ class Lottery(commands.Cog):
     async def lottery_tickets_list(self, ctx):
         embed = discord.Embed()
         for t in ctx.lottery_con.get_my_drawings(ctx.author):
-            embed.add_field(
-                name="Ticket", value=t.numbers_as_string(), inline=False)
+            embed.add_field(name="Ticket", value=t.numbers_as_string())
         await ctx.send(embed=embed)
         
 
     @lottery_tickets.command(name="costs")
-    async def lottery_tickets_list(self, ctx):
+    async def lottery_tickets_cost(self, ctx):
         await ctx.send("Costs 5")
 
     @lottery.command(name="join")

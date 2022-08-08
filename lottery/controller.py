@@ -23,7 +23,5 @@ class LotteryController:
         return last_drawing
 
     def get_my_drawings(self, author):
-        print("b")
         drawings = LotteryDrawing.objects.filter(members_id=author.id)
-        print('c')
         return drawings
