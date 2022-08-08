@@ -11,4 +11,5 @@ class LotteryController:
         numbers = [int(x) for x in numbers.split(", ")]
         drawing = LotteryDrawing()
         drawing.numbers = numbers
+        print("Saved")
         drawing.save()
