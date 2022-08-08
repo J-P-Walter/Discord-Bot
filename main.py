@@ -1,6 +1,9 @@
 from discord.ext import commands
 import configparser
 import os
+from mongoengine import *
+
+connect('discord', host='localhost', username='root', password='root', authentication_source='admin')
 
 bot = commands.Bot(command_prefix='!')
 

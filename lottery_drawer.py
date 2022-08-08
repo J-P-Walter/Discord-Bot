@@ -8,7 +8,6 @@ import configparser
 def job():
     dc = LotteryController()
     numbers = dc.draw_numbers()
-    #print(numbers)
     config = configparser.ConfigParser()
     config.read('tokens.cfg')
     id = config.get('WEBHOOK', 'id')
