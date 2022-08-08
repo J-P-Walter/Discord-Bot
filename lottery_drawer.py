@@ -13,7 +13,8 @@ def job():
     id = config.get('WEBHOOK', 'id')
     token = config.get('WEBHOOK', 'token')
     webhook = Webhook.partial(id, token, adapter=RequestsWebhookAdapter())
-    webhook.send(", ".join(str(x) for x in numbers), username = "Lottery Webhook")
+    webhook.send(",".join(str(x) for x in numbers), username = "Lottery Webhook")
+
 schedule.every(5).seconds.do(job)
 
 while True:

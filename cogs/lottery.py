@@ -1,6 +1,7 @@
 from discord.ext import commands
 from lottery.controller import LotteryController
 import configparser
+import discord
 
 class Lottery(commands.Cog):
     def __init__(self, bot):
@@ -13,7 +14,8 @@ class Lottery(commands.Cog):
         id = config.get('WEBHOOK', 'id')
         if int(id) == message.author.id and message.channel.id == 1006251363799400519:
             dc = LotteryController()
-            dc.save(message.content)
+            numbers = [int(x) for x in message.content.split(',')]
+            dc.save(numbers)
 
     @commands.group()
     async def lottery(self, ctx):
@@ -22,14 +24,57 @@ class Lottery(commands.Cog):
 
     @lottery.command(name="last")
     async def lottery_last(self, ctx):
-        pass
+        last_drawing = ctx.lottery_con.get_last_drawing()
+        await ctx.send("Last Drawing: %s" %last_drawing.numbers_as_string())
 
     @lottery.command(name="next")
     async def lottery_next(self, ctx):
         pass
 
-    @lottery.command(name="join")
-    async def lottery_join(self, ctx, *numbers: int):
+    @lottery.group(name="tickets")
+    async def lottery_tickets(self, ctx):
+        #c = self.bot.get_command("lottery tickets costs")
+        #await ctx.invoke(c)
         pass
+
+    @lottery_tickets.command(name="list")
+    @commands.dm_only()
+    async def lottery_tickets_list(self, ctx):
+        embed = discord.Embed()
+        for t in ctx.lottery_con.get_my_drawings(ctx.author):
+            embed.add_field(
+                name="Ticket", value=t.numbers_as_string(), inline=False)
+        await ctx.send(embed=embed)
+        
+
+    @lottery_tickets.command(name="costs")
+    async def lottery_tickets_list(self, ctx):
+        await ctx.send("Costs 5")
+
+    @lottery.command(name="join")
+    @commands.dm_only()
+    async def lottery_join(self, ctx, *numbers: int):
+        if len(numbers) != 6:
+                await ctx.send("Need 6 numbers")
+        duplicates = False
+        oob = False
+
+        for n in numbers:
+            if numbers.count(n) > 1:
+                duplicates = True
+            if n > 49 or n < 1:
+                oob = True
+        
+        if duplicates:
+            await ctx.send("Need 6 unique numbers")
+        if oob:
+            await ctx.send("Need 6 numbers between 1 and 49")
+
+        ctx.lottery_con.save(sorted(numbers), ctx.author)
+        await ctx.send("You've entered the lottery")
+
+
+
+
 def setup(bot):
     bot.add_cog(Lottery(bot))
