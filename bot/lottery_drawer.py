@@ -1,7 +1,6 @@
 from lottery.controller import LotteryController
 import schedule
 import time
-import requests
 from discord import Webhook, RequestsWebhookAdapter
 import configparser
 
