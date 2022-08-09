@@ -37,6 +37,7 @@ class LotteryController:
             '6': 0,
         }
         for t in all_tickets:
+            print('a')
             matching_numbers = set(t.numbers).intersection(self.get_last_drawing().numbers)
             matches = len(matching_numbers)
             if matches == 2:
