@@ -13,7 +13,7 @@ hangman_games = {}
 word = 'discord'
 user_guesses = list()
 
-class Games(commands.Cog):
+class Games(commands.Cog, command_attrs=dict(hidden=True)):
     def __init__(self, bot):
         self.bot = bot
 
