@@ -1,0 +1,8 @@
+[TOKEN]
+token = token
+[REDDIT]
+reddit_id = id
+reddit_secret = secret
+[WEBHOOK]
+id = id
+token = token
