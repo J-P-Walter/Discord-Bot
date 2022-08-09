@@ -2,6 +2,23 @@
 version: '3.1'
 
 services:
+  discord_bot:
+    container_name: "discord_bot"
+    build:
+      context: .
+      dockerfile: ./bot/Dockerfile
+    entrypoint: ['python', 'main.py']
+    depends_on:
+      - mongo
+
+  lottery_scheduler:
+      container_name: "lottery_scheduler"
+      build:
+        context: .
+        dockerfile: ./bot/Dockerfile
+      entrypoint: ['python', 'lottery_drawer.py']
+      depends_on:
+        - mongo
 
   mongo:
     image: mongo
