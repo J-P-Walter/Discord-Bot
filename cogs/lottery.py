@@ -16,6 +16,14 @@ class Lottery(commands.Cog):
             dc = LotteryController()
             numbers = [int(x) for x in message.content.split(',')]
             dc.save(numbers)
+            results = dc.get_drawing_results()
+            embed = discord.Embed()
+            embed.add_field(name='6', value=results['6'])
+            embed.add_field(name='5', value=results['5'])
+            embed.add_field(name='4', value=results['4'])
+            embed.add_field(name='3', value=results['3'])
+            embed.add_field(name='2', value=results['2'])
+            await message.channel.send(embed=embed)
 
     @commands.group()
     async def lottery(self, ctx):
