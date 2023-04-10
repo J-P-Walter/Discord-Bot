@@ -1,6 +1,6 @@
 Creating my first Discord Bot
 
-Using tutorial from StartupTechTutorial as a guide, this project is a quick refresher on some OOP for me, as well as introducing some new topics such as websockets, MVC architecture, using a database (mongo), and docker 
+This project is a quick refresher on some OOP for me, as well as introducing some new topics such as websockets, MVC architecture, using a database (mongo), and docker 
 
 There are two branches: main and DockerBranch
 Main has my completed bot, should be able to just run it from main.py and it should work given you create your own tokens.cfg and get your own Discord/Reddit/Webhook tokens and ids. Can run lottery_drawer.py to get lottery numbers as well.
